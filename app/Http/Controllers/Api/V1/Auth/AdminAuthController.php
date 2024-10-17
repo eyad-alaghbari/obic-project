@@ -1,0 +1,60 @@
+<?php
+
+namespace App\Http\Controllers\Api\V1\Auth;
+
+use App\Models\User;
+use App\Models\Admin;
+use Illuminate\Http\Request;
+use Tymon\JWTAuth\Facades\JWTAuth;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\AdminLoginRequest;
+use App\Http\Requests\AdminRegisterRequest;
+use App\Http\Resources\AdminResource;
+use App\Services\V1\Auth\AdminAuthService;
+
+class AdminAuthController extends Controller
+{
+    // use ApiResponseTrait;
+
+    protected $adminAuthService;
+
+    public function __construct(AdminAuthService $adminAuthService)
+    {
+        $this->adminAuthService = $adminAuthService;
+    }
+
+    /**
+     * Register a User.
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function register(AdminRegisterRequest $request)
+    {
+        return $this->adminAuthService->register($request->only('name', 'email', 'password'));
+    }
+
+    /**
+     * Get a JWT via given credentials.
+     *
+     * @return \Illuminate\Http\JsonResponse
+     *
+     */
+    public function login(AdminLoginRequest $request)
+    {
+        // تفويض العملية إلى الخدمة
+        return $this->adminAuthService->login($request->only('email', 'password'));
+    }
+
+    // تسجيل الخروج
+    public function logout()
+    {
+        // تفويض العملية إلى الخدمة
+        return $this->adminAuthService->logout();
+    }
+
+    // استرجاع بيانات المستخدم الحالي
+    public function getUser()
+    {
+        return  $this->adminAuthService->getUser();
+    }
+}
