@@ -24,7 +24,6 @@ trait ApiResponseTrait
     // Response with data
     public function successResponse($data = [], string $message = 'Operation successful', int $statusCode = 200): JsonResponse
     {
-        // dd($data);
         return response()->json([
             'status' => 'success',
             'message' => $message,
@@ -104,9 +103,7 @@ trait ApiResponseTrait
             'has_more' => $data->hasMorePages(),
             'total_pages' => $data->lastPage(),
             'current_page' => $data->currentPage(),
-            'per_page' => $data->perPage(),
-            // 'links' => $data->links(),
-            // 'data' => $data->items(),
+            'per_page' => $data->perPage()
         ];
     }
 }
