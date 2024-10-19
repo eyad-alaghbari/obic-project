@@ -28,10 +28,6 @@ class AdminLoginRequest extends FormRequest
     }
     public function messages()
     {
-        return [
-            'email.required' => 'Email is required',
-            'email.exists' => 'Email does not exist',
-            'password.required' => 'Password is required',
-        ];
+        return config('validation-messages.auth');
     }
 }

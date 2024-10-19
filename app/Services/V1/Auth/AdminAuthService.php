@@ -23,9 +23,16 @@ class AdminAuthService
         $data['password'] = bcrypt($data['password']);
         $admin = User::create($data);
 
-        $token = JWTAuth::fromUser($admin);
+        if (!$admin) {
+            return $this->ErrorResponse('خطأ في انشاء المستخدم', 500);
+        }
 
-        return $this->SuccessResponse( AdminResource::make($admin) , 'تم انشاء المستخدم بنجاح', 201);
+
+        return response()->json([
+            'message' => 'User successfully registered',
+            'user' => $admin,
+            'token' => JWTAuth::fromUser($admin),
+        ], 201);
     }
 
     /**
@@ -72,7 +79,7 @@ class AdminAuthService
             return response()->json(['error' => 'User not authenticated'], 401);
         }
 
-        return $this->SuccessResponse( AdminResource::make($user) , 'تم الحصول على بيانات المستخدم الحالي', 200) ;
+        return $this->SuccessResponse(AdminResource::make($user), 'تم الحصول على بيانات المستخدم الحالي', 200);
     }
 
     /**
@@ -81,13 +88,12 @@ class AdminAuthService
      * @param string $token
      * @return array
      */
-    protected function respondWithToken() : array
+    protected function respondWithToken(): array
     {
         return [
             'token_type' => 'bearer',
             'expires_in' => Auth::guard('admin')->factory()->getTTL() * 60,
-            'user' => AdminResource::make( Auth::guard('admin')->user()) // بيانات المستخدم الحالي
+            'user' => AdminResource::make(Auth::guard('admin')->user()) // بيانات المستخدم الحالي
         ];
     }
 }
-

@@ -14,7 +14,6 @@ use App\Services\V1\Auth\AdminAuthService;
 
 class AdminAuthController extends Controller
 {
-    // use ApiResponseTrait;
 
     protected $adminAuthService;
 
@@ -41,18 +40,14 @@ class AdminAuthController extends Controller
      */
     public function login(AdminLoginRequest $request)
     {
-        // تفويض العملية إلى الخدمة
         return $this->adminAuthService->login($request->only('email', 'password'));
     }
 
-    // تسجيل الخروج
     public function logout()
     {
-        // تفويض العملية إلى الخدمة
         return $this->adminAuthService->logout();
     }
 
-    // استرجاع بيانات المستخدم الحالي
     public function getUser()
     {
         return  $this->adminAuthService->getUser();

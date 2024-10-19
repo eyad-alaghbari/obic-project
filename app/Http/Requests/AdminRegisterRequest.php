@@ -11,7 +11,7 @@ class AdminRegisterRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,8 +22,8 @@ class AdminRegisterRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|string|max:255',
-            'email' => 'required|email',
+            'name' => 'required|string|min:3|max:255',
+            'email' => 'required|email|unique:users',
             'password' => 'required|min:6',
             'c_password' => 'required|same:password',
         ];
@@ -31,14 +31,6 @@ class AdminRegisterRequest extends FormRequest
 
     public function messages()
     {
-        return [
-            'name.required' => 'Name is required',
-            'name.max' => 'Name must not exceed 255 characters',
-            'name.string' => 'Name must be a string',
-            'email.required' => 'Email is required',
-            'password.required' => 'Password is required',
-            'c_password.required' => 'Confirm Password is required',
-            'c_password.same' => 'Password does not match',
-        ];
+        return config('validation-messages.auth');
     }
 }
