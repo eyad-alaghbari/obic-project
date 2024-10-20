@@ -12,7 +12,7 @@ return Application::configure(basePath: dirname(__DIR__))
         web: __DIR__ . '/../routes/web.php',
         commands: __DIR__ . '/../routes/console.php',
         using: function (Router $router) {
-            $router
+            $router->middleware('throttle:api')
                 ->prefix('api/v1')->group(function () use ($router) {
                     $router->namespace('App\Http\Controllers\Api')
                         ->group(base_path('routes/v1/api.php'));
@@ -20,10 +20,11 @@ return Application::configure(basePath: dirname(__DIR__))
         }
     )
     ->withMiddleware(function (Middleware $middleware) {
-    // $middleware->alias([
-    //     'isCustomer' => AuthenticateCustomer::class,
-    //     'isAdmin' => AuthenticateAdmin::class,
-    // ]);
+        // $middleware->alias([
+        //     'isCustomer' => AuthenticateCustomer::class,
+        //     'isAdmin' => AuthenticateAdmin::class,
+        // ]);
+
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //

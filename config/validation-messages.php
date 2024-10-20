@@ -32,4 +32,8 @@ return [
         'logo_max' => 'The logo must not be greater than :max kilobytes.',
         'logo_image' => 'The logo must be an image.',
     ],
+    'category' => [
+        'name_required' => 'The category name is required.',
+        'parent_id_exists' => 'The parent category must be valid.',
+    ],
 ];

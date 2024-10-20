@@ -31,24 +31,24 @@ class VendorRepository implements VendorRepositoryInterface
         return $this->model->where($field, $value)->paginate($per_page);
     }
 
-    public function findById($id)
+    public function findById($id): Vendor
     {
         return $this->model->findOrFail($id);
     }
 
-    public function create(array $data)
+    public function create(array $data): Vendor
     {
         return $this->model->create($data);
     }
 
-    public function update($id, array $data)
+    public function update($id, array $data): Vendor
     {
         $vendor = $this->findById($id);
         $vendor->update($data);
         return $vendor;
     }
 
-    public function delete($id)
+    public function delete($id): bool
     {
         $vendor = $this->findById($id);
         return $vendor->delete();
