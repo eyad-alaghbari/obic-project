@@ -11,14 +11,19 @@ class Product extends Model
         'name',
         'description',
         'price',
-        'category_id',
         'vendor_id',
         'stock',
     ];
 
+
     public function category()
     {
-        return $this->belongsTo(Category::class);
+        return $this->belongsToMany(Category::class, 'category_product', 'product_id', 'category_id');
+    }
+
+    public function customizationOptions()
+    {
+        return $this->belongsToMany(CustomizationOption::class);
     }
 
     public function vendor()
