@@ -13,15 +13,19 @@ class Category extends Model
         return $this->belongsTo(Category::class, 'parent_id');
     }
 
-    // علاقة مع الفئات الفرعية (Child categories)
     public function children()
     {
         return $this->hasMany(Category::class, 'parent_id');
     }
 
-    // إضافة علاقة مع المنتجات
     public function products()
     {
         return $this->hasMany(Product::class);
     }
+
+    public function vendors()
+    {
+        return $this->belongsToMany(Vendor::class, 'category_vendor', 'category_id', 'vendor_id');
+    }
+
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Repositories;
+namespace App\Repositories\Eloquent;
 
 use App\Models\Category;
 use App\Repositories\Interfaces\CategoryRepositoryInterface;
@@ -20,7 +20,8 @@ class CategoryRepository implements CategoryRepositoryInterface
 
     public function getAllParentCategories($per_page = 10): LengthAwarePaginator
     {
-        return Category::whereNull('parent_id')->with('children')->paginate($per_page);
+        // dd('sad');
+    return Category::whereNull('parent_id')->with('children')->paginate($per_page);
     }
 
     public function getAllChildCategories($parentId, $per_page = 10): LengthAwarePaginator
@@ -55,5 +56,33 @@ class CategoryRepository implements CategoryRepositoryInterface
     {
         $category = Category::findOrFail($id);
         return $category->delete();
+    }
+
+    public function attachVendorToCategory($categoryId, $vendorId)
+    {
+        try {
+            $category = Category::findOrFail($categoryId);
+            $category->vendors()->attach($vendorId);
+        } catch (\Exception $exception) {
+            // TODO: Log the exception
+            throw new \RuntimeException('Something went wrong while attaching a vendor to a category.');
+        }
+    }
+
+    public function detachVendorFromCategory($categoryId, $vendorId)
+    {
+        try {
+            $category = Category::findOrFail($categoryId);
+            $category->vendors()->detach($vendorId);
+        } catch (\Exception $exception) {
+            // TODO: Log the exception
+            throw new \RuntimeException('Something went wrong while detaching a vendor from a category.', 0, $exception);
+        }
+    }
+
+
+    public function getVendorsByCategory($categoryId, $perPage = 10): LengthAwarePaginator
+    {
+        return Category::with('vendors')->findOrFail($categoryId)->vendors()->paginate($perPage);
     }
 }

@@ -36,10 +36,21 @@ Route::prefix('vendors')->group(function () {
 
 });
 
+
 Route::prefix('categories')->group(function () {
-    Route::apiResource('/', CategoryController::class);
 
     Route::get('/parent-categories', [CategoryController::class, 'getParentCategories']);
+
     Route::get('/child-categories/{parentId}', [CategoryController::class, 'getChildCategories']);
+
     Route::get('/search', [CategoryController::class, 'search']);
+
+    Route::post('/{categoryId}/vendors', [CategoryController::class, 'attachVendorToCategory']);
+
+    Route::delete('/{categoryId}/vendors', [CategoryController::class, 'detachVendorFromCategory']);
+
+    Route::get('/{categoryId}/vendors', [CategoryController::class, 'getVendorsByCategory']);
+
 });
+
+Route::apiResource('categories', CategoryController::class);

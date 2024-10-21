@@ -26,7 +26,7 @@ class AppServiceProvider extends ServiceProvider
     {
         RateLimiter::for('api', function (Request $request) {
             $user = $request->user();
-            $limit = $user instanceof User ? 3 : 1;
+            $limit = $user instanceof User ? 60 : 40;
 
             $identifier = $user ? $user->id : $request->ip();
 

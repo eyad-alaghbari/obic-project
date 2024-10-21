@@ -24,6 +24,11 @@ class Vendor extends Model
         return $this->hasMany(Product::class);
     }
 
+    public function categories()
+    {
+        return $this->belongsToMany(Category::class, 'category_vendor', 'vendor_id', 'category_id');
+    }
+
     public function reviews()
     {
         return $this->hasMany(Review::class);

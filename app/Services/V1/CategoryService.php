@@ -40,7 +40,7 @@ class CategoryService
     /**
      * Get all parent categories.
      *
-     * @param int $per_page
+     *@param int $per_page
      * @return \Illuminate\Pagination\LengthAwarePaginator
      */
     public function getAllParentCategories($per_page): LengthAwarePaginator
@@ -98,6 +98,7 @@ class CategoryService
      */
     public function createCategory(array $data): Category
     {
+        // dd($data);
         return $this->categoryRepository->createCategory($data);
     }
 
@@ -110,6 +111,7 @@ class CategoryService
      */
     public function updateCategory(int $id, array $data): Category
     {
+        // dd($data);
         return $this->categoryRepository->updateCategory($id, $data);
     }
 
@@ -123,4 +125,41 @@ class CategoryService
     {
         return $this->categoryRepository->deleteCategory($id);
     }
+
+
+    /**
+     * Attach vendor to category
+     * @param int $categoryId
+     * @param int $vendorId
+     * @return bool
+     */
+    public function attachVendorToCategory(int $categoryId, int $vendorId): bool
+    {
+        return $this->categoryRepository->attachVendorToCategory($categoryId, $vendorId);
+    }
+
+
+    /**
+     * Detach vendor from category
+     * @param int $categoryId
+     * @param int $vendorId
+     * @return bool
+     */
+    public function detachVendorFromCategory(int $categoryId, int $vendorId): bool
+    {
+        
+        return $this->categoryRepository->detachVendorFromCategory($categoryId, $vendorId);
+    }
+
+
+    /**
+     * @param int $categoryId
+     * @param int $perPage
+     * @return \Illuminate\Pagination\LengthAwarePaginator
+     */
+    public function getVendorsByCategory(int $categoryId, int $perPage): LengthAwarePaginator
+    {
+        return $this->categoryRepository->getVendorsByCategory($categoryId, $perPage);
+    }
+
 }

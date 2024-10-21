@@ -3,6 +3,7 @@
 namespace App\Repositories\Interfaces;
 
 use App\Models\Category;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 interface CategoryRepositoryInterface
 {
@@ -10,20 +11,20 @@ interface CategoryRepositoryInterface
      * @param int $perPage
      * @return \Illuminate\Pagination\LengthAwarePaginator
      */
-    public function getAllCategories(int $perPage): \Illuminate\Pagination\LengthAwarePaginator;
+    public function getAllCategories(int $perPage): LengthAwarePaginator;
 
     /**
      * @param int $perPage
      * @return \Illuminate\Pagination\LengthAwarePaginator
      */
-    public function getAllParentCategories(int $perPage): \Illuminate\Pagination\LengthAwarePaginator;
+    public function getAllParentCategories(int $perPage): LengthAwarePaginator;
 
     /**
      * @param int $parentId
      * @param int $perPage
      * @return \Illuminate\Pagination\LengthAwarePaginator
      */
-    public function getAllChildCategories(int $parentId, int $perPage): \Illuminate\Pagination\LengthAwarePaginator;
+    public function getAllChildCategories(int $parentId, int $perPage): LengthAwarePaginator;
 
     /**
      * @param int $id
@@ -36,7 +37,7 @@ interface CategoryRepositoryInterface
      * @param int $perPage
      * @return \Illuminate\Pagination\LengthAwarePaginator
      */
-    public function searchCategory(string $keyword, int $perPage): \Illuminate\Pagination\LengthAwarePaginator;
+    public function searchCategory(string $keyword, int $perPage): LengthAwarePaginator;
 
     /**
      * @param array $data
@@ -56,5 +57,28 @@ interface CategoryRepositoryInterface
      * @return bool|null
      */
     public function deleteCategory(int $id): ?bool;
+
+    /**
+     * Attach vendor to category
+     * @param int $categoryId
+     * @param int $vendorId
+     * @return bool
+     */
+    public function attachVendorToCategory(int $categoryId, int $vendorId);
+
+    /**
+     * Detach vendor from category
+     * @param int $categoryId
+     * @param int $vendorId
+     * @return bool
+     */
+    public function detachVendorFromCategory(int $categoryId, int $vendorId);
+
+    /**
+     * @param int $vendorId
+     * @param int $perPage
+     * @return \Illuminate\Pagination\LengthAwarePaginator
+     */
+    public function getVendorsByCategory(int $categoryId, int $perPage): LengthAwarePaginator;
 
 }

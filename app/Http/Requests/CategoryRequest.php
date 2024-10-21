@@ -21,6 +21,7 @@ class CategoryRequest extends FormRequest
      */
     public function rules(): array
     {
+        // dd($this->all());
         return [
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
@@ -30,6 +31,10 @@ class CategoryRequest extends FormRequest
 
     public function messages(): array
     {
-        return config('validation-messages.category');
+        return [
+            'name.required' => config('validation-messages.category.name_required'),
+            'parent_id.exists' => config('validation-messages.category.parent_id_exists'),
+            'description.string' => config('validation-messages.category.description_string'),
+        ];
     }
 }

@@ -16,9 +16,9 @@ class CategoryController extends Controller
     /**
      * The category service.
      *
-     * @var \App\Services\V1\CategoryService
+     *
      */
-    protected CategoryService $categoryService;
+    protected $categoryService;
 
     /**
      * Create a new controller instance.
@@ -47,15 +47,16 @@ class CategoryController extends Controller
     /**
      * Get all parent categories.
      *
-     * @param int $per_page
+     *
      * @return \Illuminate\Http\JsonResponse
      */
     public function getParentCategories(request $request)
     {
-        $categories = $this->categoryService->getAllParentCategories($request->per_page);
+        $categories = $this->categoryService->getAllParentCategories($request->input('per_page'));
 
         return $this->successResponse(CategoryResource::collection($categories), 'Categories retrieved successfully', 200);
     }
+
 
     /**
      * Get all child categories by parent id.
@@ -71,6 +72,14 @@ class CategoryController extends Controller
         return $this->successResponse(CategoryResource::collection($categories), 'Categories retrieved successfully', 200);
     }
 
+
+    /**
+     * Search categories.
+     *
+     * @param string $keyword
+     * @param int $per_page
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function search(request $request)
     {
         $categories = $this->categoryService->searchCategory($request->input('keyword'), $request->per_page);
@@ -78,18 +87,23 @@ class CategoryController extends Controller
         return $this->successResponse(CategoryResource::collection($categories), 'Categories retrieved successfully', 200);
     }
 
+
+
     /**
      * Store a newly created resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
+     * @param \App\Http\Requests\CategoryRequest $request
      * @return \Illuminate\Http\JsonResponse
      */
     public function store(CategoryRequest $request)
     {
-        $category = $this->categoryService->createCategory($request->validate());
+        $category = $this->categoryService->createCategory($request->validated());
 
         return $this->successResponse(CategoryResource::make($category), 'Category created successfully', 201);
     }
+
+
+
 
     /**
      * Display the specified resource.
@@ -104,19 +118,23 @@ class CategoryController extends Controller
         return $this->successResponse(CategoryResource::make($category), 'Category retrieved successfully', 200);
     }
 
+
+
     /**
      * Update the specified resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
+     * @param \App\Http\Requests\CategoryRequest $request
      * @param int $id
      * @return \Illuminate\Http\JsonResponse
      */
     public function update(CategoryRequest $request, int $id)
     {
-        $category = $this->categoryService->updateCategory($id, $request->validate());
+        $category = $this->categoryService->updateCategory($id, $request->validated());
 
         return $this->successResponse(CategoryResource::make($category), 'Category updated successfully', 201);
     }
+
+
 
     /**
      * Remove the specified resource from storage.
@@ -129,4 +147,46 @@ class CategoryController extends Controller
         $this->categoryService->deleteCategory($id);
         return $this->successMessage('Category deleted successfully', 200);
     }
+
+
+    /**
+     * Attach vendor to category
+     * @param int $categoryId
+     * @param int $vendorId
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function attachVendorToCategory(Request $request, $categoryId)
+    {
+        $this->categoryService->attachVendorToCategory($categoryId, $request->vendorId);
+        return $this->successMessage('Vendor attached successfully', 201);
+    }
+
+
+
+    /**
+     * Detach vendor from category
+     * @param int $categoryId
+     * @param int $vendorId
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function detachVendorFromCategory(Request $request, $categoryId)
+    {
+        $this->categoryService->detachVendorFromCategory($categoryId, $request->vendorId);
+        return $this->successMessage('Vendor detached successfully', 201);
+    }
+
+
+    /**
+     * Get all vendors by category
+     * @param int $categoryId
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getVendorsByCategory(request $request, int $categoryId)
+    {
+        $vendors = $this->categoryService->getVendorsByCategory($categoryId, $request->per_page);
+        return $this->successResponse($vendors, 'Vendors retrieved successfully', 200);
+    }
+
+
+
 }
