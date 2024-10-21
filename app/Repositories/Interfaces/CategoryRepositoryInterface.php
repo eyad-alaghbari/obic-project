@@ -81,4 +81,12 @@ interface CategoryRepositoryInterface
      */
     public function getVendorsByCategory(int $categoryId, int $perPage): LengthAwarePaginator;
 
+/**
+ * @param int $categoryId
+ * @param array $relations
+ * @return Category | null
+ *
+ */
+    public function getByIdWithRelations(int $id, array $relations): ?Category;
+
 }

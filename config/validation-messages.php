@@ -32,9 +32,30 @@ return [
         'logo_max' => 'The logo must not be greater than :max kilobytes.',
         'logo_image' => 'The logo must be an image.',
     ],
+    // 'product' => [
+    //     'name_required' => 'The name product is required.',
+    //     'description_string' => 'The description must be a string.',
+    //     'price_required' => 'The price product is required.',
+    //     'price_numeric' => 'The price product must be numeric.',
+    //     'stock_required' => 'The stock product is required.',
+    //     'stock_numeric' => 'The stock product must be numeric.',
+    // ],
     'category' => [
         'name_required' => 'The category name is required.',
         'parent_id_exists' => 'The parent category must be valid.',
         'description_string' => 'The description must be a string.',
+    ],
+    'customization' => [
+        'name_required' => 'The customization name is required.',
+        'name_max' => 'The customization name must not exceed :max characters.',
+        'name_string' => 'The customization name must be a string.',
+    ],
+    'customization_option' => [
+        'value_required' => 'The customization option value is required.',
+        'value_max' => 'The customization option value must not exceed :max characters.',
+        'value_string' => 'The customization option value must be a string.',
+        'customization_id_required' => 'The customization option customization id is required.',
+        'customization_id_integer' => 'The customization option customization id must be an integer.',
+        'customization_id_exists' => 'The customization option customization id must be valid.',
     ],
 ];

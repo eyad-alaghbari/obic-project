@@ -147,7 +147,7 @@ class CategoryService
      */
     public function detachVendorFromCategory(int $categoryId, int $vendorId): bool
     {
-        
+
         return $this->categoryRepository->detachVendorFromCategory($categoryId, $vendorId);
     }
 
@@ -161,5 +161,27 @@ class CategoryService
     {
         return $this->categoryRepository->getVendorsByCategory($categoryId, $perPage);
     }
+
+    /**
+     * @param int $categoryId
+     * @param array $relations
+     * @return Category | null
+     */
+    public function getCustomizationsForCategory(int $categoryId, array $relations): ?Category
+    {
+        return $this->categoryRepository->getByIdWithRelations($categoryId, $relations);
+    }
+
+
+    /**
+     * @param int $categoryId
+     * @param int $perPage
+     * @return \Illuminate\Pagination\LengthAwarePaginator
+     */
+    // public function getProductsByCategory(int $categoryId, int $perPage): LengthAwarePaginator
+    // {
+    //     return $this->categoryRepository->getProductsByCategory($categoryId, $perPage);
+    // }
+
 
 }

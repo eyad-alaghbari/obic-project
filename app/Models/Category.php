@@ -20,7 +20,7 @@ class Category extends Model
 
     public function products()
     {
-        return $this->hasMany(Product::class);
+        return $this->belongsToMany(Product::class, 'category_product', 'category_id', 'product_id');
     }
 
     public function vendors()
@@ -28,4 +28,13 @@ class Category extends Model
         return $this->belongsToMany(Vendor::class, 'category_vendor', 'category_id', 'vendor_id');
     }
 
+    public function customizations()
+    {
+        return $this->belongsToMany(Customization::class, 'category_customization', 'category_id', 'customization_id');
+    }
+
+    // public function options()
+    // {
+    //     return $this->hasManyThrough(CustomizationOption::class, Customization::class, 'category_id', 'customization_id');
+    // }
 }

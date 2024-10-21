@@ -80,9 +80,15 @@ class CategoryRepository implements CategoryRepositoryInterface
         }
     }
 
-
     public function getVendorsByCategory($categoryId, $perPage = 10): LengthAwarePaginator
     {
         return Category::with('vendors')->findOrFail($categoryId)->vendors()->paginate($perPage);
     }
+
+
+    public function getByIdWithRelations(int $id, array $relations): ?Category
+    {
+        return Category::with($relations)->findOrFail($id);
+    }
+    
 }

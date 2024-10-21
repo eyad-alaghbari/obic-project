@@ -7,6 +7,7 @@ use App\Http\Requests\CategoryRequest;
 use App\Http\Resources\CategoryResource;
 use App\Services\V1\CategoryService;
 use App\Trait\ApiResponseTrait;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class CategoryController extends Controller
@@ -40,7 +41,7 @@ class CategoryController extends Controller
     {
         $categories = $this->categoryService->getAllCategories($request->per_page);
 
-        return $this->successResponse(CategoryResource::collection($categories), 'Categories retrieved successfully', 200);
+        return $this->paginatedResponse(CategoryResource::collection($categories), 'Categories retrieved successfully', 200);
     }
 
 
@@ -54,7 +55,7 @@ class CategoryController extends Controller
     {
         $categories = $this->categoryService->getAllParentCategories($request->input('per_page'));
 
-        return $this->successResponse(CategoryResource::collection($categories), 'Categories retrieved successfully', 200);
+        return $this->paginatedResponse(CategoryResource::collection($categories), 'Categories retrieved successfully', 200);
     }
 
 
@@ -69,7 +70,7 @@ class CategoryController extends Controller
     {
         $categories = $this->categoryService->getAllChildCategories($parentId, $request->per_page);
 
-        return $this->successResponse(CategoryResource::collection($categories), 'Categories retrieved successfully', 200);
+        return $this->paginatedResponse(CategoryResource::collection($categories), 'Categories retrieved successfully', 200);
     }
 
 
@@ -84,9 +85,8 @@ class CategoryController extends Controller
     {
         $categories = $this->categoryService->searchCategory($request->input('keyword'), $request->per_page);
 
-        return $this->successResponse(CategoryResource::collection($categories), 'Categories retrieved successfully', 200);
+        return $this->paginatedResponse(CategoryResource::collection($categories), 'Categories retrieved successfully', 200);
     }
-
 
 
     /**
@@ -103,8 +103,6 @@ class CategoryController extends Controller
     }
 
 
-
-
     /**
      * Display the specified resource.
      *
@@ -117,7 +115,6 @@ class CategoryController extends Controller
 
         return $this->successResponse(CategoryResource::make($category), 'Category retrieved successfully', 200);
     }
-
 
 
     /**
@@ -145,6 +142,7 @@ class CategoryController extends Controller
     public function destroy(int $id)
     {
         $this->categoryService->deleteCategory($id);
+
         return $this->successMessage('Category deleted successfully', 200);
     }
 
@@ -158,6 +156,7 @@ class CategoryController extends Controller
     public function attachVendorToCategory(Request $request, $categoryId)
     {
         $this->categoryService->attachVendorToCategory($categoryId, $request->vendorId);
+
         return $this->successMessage('Vendor attached successfully', 201);
     }
 
@@ -172,6 +171,7 @@ class CategoryController extends Controller
     public function detachVendorFromCategory(Request $request, $categoryId)
     {
         $this->categoryService->detachVendorFromCategory($categoryId, $request->vendorId);
+
         return $this->successMessage('Vendor detached successfully', 201);
     }
 
@@ -184,9 +184,14 @@ class CategoryController extends Controller
     public function getVendorsByCategory(request $request, int $categoryId)
     {
         $vendors = $this->categoryService->getVendorsByCategory($categoryId, $request->per_page);
+
         return $this->successResponse($vendors, 'Vendors retrieved successfully', 200);
     }
 
-
+    public function getCustomizationsForCategory(int $id): JsonResponse
+    {
+        $customizations = $this->categoryService->getCustomizationsForCategory($id, ['customizations']);
+        return $this->successResponse(CategoryResource::make($customizations), 'Customizations retrieved successfully', 200);
+    }
 
 }
