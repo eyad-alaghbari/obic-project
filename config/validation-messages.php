@@ -35,5 +35,6 @@ return [
     'category' => [
         'name_required' => 'The category name is required.',
         'parent_id_exists' => 'The parent category must be valid.',
+        'description_string' => 'The description must be a string.',
     ],
 ];
