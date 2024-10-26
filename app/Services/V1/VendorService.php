@@ -2,10 +2,11 @@
 
 namespace App\Services\V1;
 
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
-use App\Repositories\Interfaces\VendorRepositoryInterface;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
+use App\Repositories\Interfaces\VendorRepositoryInterface;
 
 class VendorService
 {
@@ -61,12 +62,18 @@ class VendorService
      * @param array $data
      * @return \App\Models\Vendor
      */
-    public function createVendor(array $data): \App\Models\Vendor
+    public function createVendor(array $data): ?\App\Models\Vendor
     {
-        if (isset($data['logo'])) {
-            $data['logo'] = $this->storeImage($data['logo']);
+        try {
+            if (isset($data['logo'])) {
+                $data['logo'] = $this->storeImage($data['logo']);
+            }
+            return $this->vendorRepository->create($data);
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+            return null;
+
         }
-        return $this->vendorRepository->create($data);
     }
 
     /**
