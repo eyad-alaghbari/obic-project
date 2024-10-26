@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CategoryRequest;
+use App\Http\Requests\SyncCustomizationsRequest;
 use App\Http\Resources\CategoryResource;
 use App\Services\V1\CategoryService;
 use App\Trait\ApiResponseTrait;
@@ -185,13 +186,36 @@ class CategoryController extends Controller
     {
         $vendors = $this->categoryService->getVendorsByCategory($categoryId, $request->per_page);
 
-        return $this->successResponse($vendors, 'Vendors retrieved successfully', 200);
+        return $this->paginatedResponse($vendors, 'Vendors retrieved successfully', 200);
     }
 
-    public function getCustomizationsForCategory(int $id): JsonResponse
+    /**
+     * @param int $id
+     * @param array $relations
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getByIdWithRelations(request $request, int $id): JsonResponse
     {
-        $customizations = $this->categoryService->getCustomizationsForCategory($id, ['customizations']);
-        return $this->successResponse(CategoryResource::make($customizations), 'Customizations retrieved successfully', 200);
+        $relations = $request->input('relations', []);
+        // dd($relations);
+        $categoryWithRelations = $this->categoryService->getByIdWithRelations($id, $relations);
+        return $this->successResponse(CategoryResource::make($categoryWithRelations), 'Category retrieved successfully', 200);
     }
+
+
+    /**
+     * @param int $categoryId
+     * @param request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function syncCustomizionToCategory(SyncCustomizationsRequest $request, int $categoryId)
+    {
+        $this->categoryService->syncCustomizionToCategory($categoryId, $request->customizationIds);
+
+        return $this->successMessage('Customizations attached successfully', 201);
+    }
+
+
+
 
 }

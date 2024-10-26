@@ -22,7 +22,7 @@ class CategoryResource extends JsonResource
             'children' => CategoryResource::collection($this->whenLoaded('children')),
             'products' => ProductResource::collection($this->whenLoaded('products')),
             'customizations' => CustomizationResource::collection($this->whenLoaded('customizations')),
-            // 'vendors' => VendorResource::collection($this->whenLoaded('vendors')),
+            'vendors' => VendorResource::collection($this->whenLoaded('vendors')),
         ];
     }
 }

@@ -3,8 +3,9 @@
 namespace App\Repositories\Eloquent;
 
 use App\Models\Category;
-use App\Repositories\Interfaces\CategoryRepositoryInterface;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Pagination\LengthAwarePaginator;
+use App\Repositories\Interfaces\CategoryRepositoryInterface;
 
 class CategoryRepository implements CategoryRepositoryInterface
 {
@@ -20,13 +21,12 @@ class CategoryRepository implements CategoryRepositoryInterface
 
     public function getAllParentCategories($per_page = 10): LengthAwarePaginator
     {
-        // dd('sad');
-    return Category::whereNull('parent_id')->with('children')->paginate($per_page);
+        return Category::whereNull('parent_id')->with('children')->paginate($per_page);
     }
 
     public function getAllChildCategories($parentId, $per_page = 10): LengthAwarePaginator
     {
-        return Category::where('parent_id', $parentId)->with('children')->paginate($per_page);
+        return Category::where('parent_id', $parentId)->paginate($per_page);
     }
 
     public function searchCategory($keyword, $perPage = 10): LengthAwarePaginator
@@ -58,25 +58,40 @@ class CategoryRepository implements CategoryRepositoryInterface
         return $category->delete();
     }
 
-    public function attachVendorToCategory($categoryId, $vendorId)
+    public function attachVendorToCategory(int $categoryId, int $vendorId): bool
     {
         try {
-            $category = Category::findOrFail($categoryId);
+            $category = Category::whereNull('parent_id')->findOrFail($categoryId);
             $category->vendors()->attach($vendorId);
+
+            return true;
         } catch (\Exception $exception) {
-            // TODO: Log the exception
+            Log::error('Something went wrong while attaching a vendor to a category.', [
+                'category_id' => $categoryId,
+                'vendor_id' => $vendorId,
+                'error' => $exception->getMessage(),
+            ]);
+
             throw new \RuntimeException('Something went wrong while attaching a vendor to a category.');
+            return false;
         }
     }
 
-    public function detachVendorFromCategory($categoryId, $vendorId)
+    public function detachVendorFromCategory($categoryId, $vendorId): bool
     {
         try {
             $category = Category::findOrFail($categoryId);
             $category->vendors()->detach($vendorId);
+
+            return true;
         } catch (\Exception $exception) {
-            // TODO: Log the exception
+            Log::error('Something went wrong while detaching a vendor from a category.', [
+                'category_id' => $categoryId,
+                'vendor_id' => $vendorId,
+                'error' => $exception->getMessage(),
+            ]);
             throw new \RuntimeException('Something went wrong while detaching a vendor from a category.', 0, $exception);
+            return false;
         }
     }
 
@@ -90,5 +105,22 @@ class CategoryRepository implements CategoryRepositoryInterface
     {
         return Category::with($relations)->findOrFail($id);
     }
-    
+
+    public function syncCustomizionToCategory(int $categoryId, array $customizationIds): bool
+    {
+        try {
+            $category = Category::query()->whereNull('parent_id')->findOrFail($categoryId);
+            $category->customizations()->sync($customizationIds);
+
+            return true;
+        } catch (\Exception $exception) {
+            Log::error('Something went wrong while attaching a vendor to a category.', [
+                'category_id' => $categoryId,
+                'customization_ids' => $customizationIds,
+                'error' => $exception->getMessage(),
+            ]);
+            throw new \RuntimeException('Something went wrong while attaching a vendor to a category.');
+            return false;
+        }
+    }
 }

@@ -167,9 +167,19 @@ class CategoryService
      * @param array $relations
      * @return Category | null
      */
-    public function getCustomizationsForCategory(int $categoryId, array $relations): ?Category
+    public function getByIdWithRelations(int $categoryId, array $relations): ?Category
     {
         return $this->categoryRepository->getByIdWithRelations($categoryId, $relations);
+    }
+
+    /**
+     * @param int $categoryId
+     * @param array $customizationIds
+     * @return bool
+     */
+    public function syncCustomizionToCategory(int $categoryId, array $customizationIds): bool
+    {
+        return $this->categoryRepository->syncCustomizionToCategory($categoryId, $customizationIds);
     }
 
 

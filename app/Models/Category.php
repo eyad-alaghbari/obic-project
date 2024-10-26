@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Category extends Model
 {
-    protected $fillable = ['name', 'parent_id','description'];
+    protected $fillable = ['name', 'parent_id', 'description'];
 
     public function parent()
     {
@@ -30,7 +30,7 @@ class Category extends Model
 
     public function customizations()
     {
-        return $this->belongsToMany(Customization::class, 'category_customization', 'category_id', 'customization_id');
+        return $this->belongsToMany(Customization::class, 'category_customization', 'category_id', 'customization_id')->withTimestamps();
     }
 
     // public function options()

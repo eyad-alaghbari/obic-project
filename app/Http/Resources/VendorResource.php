@@ -21,7 +21,7 @@ class VendorResource extends JsonResource
             'email' => $this->email,
             'phone' => $this->phone,
             'address' => $this->address,
-            'logo' => $this->logo ? Storage::url($this->logo) : null,
+            'logo' => $this->logo ? asset('storage/' . $this->logo) : null,
             'status' => $this->status,
             'created_at' => $this->created_at->format('Y-m-d'),
         ];

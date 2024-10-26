@@ -64,7 +64,7 @@ interface CategoryRepositoryInterface
      * @param int $vendorId
      * @return bool
      */
-    public function attachVendorToCategory(int $categoryId, int $vendorId);
+    public function attachVendorToCategory(int $categoryId, int $vendorId): bool;
 
     /**
      * Detach vendor from category
@@ -88,5 +88,13 @@ interface CategoryRepositoryInterface
  *
  */
     public function getByIdWithRelations(int $id, array $relations): ?Category;
+
+
+    /**
+     * @param int $categoryId
+     * @param array $customizationIds
+     * @return bool
+     */
+    public function syncCustomizionToCategory(int $categoryId, array $customizationIds): bool;
 
 }
