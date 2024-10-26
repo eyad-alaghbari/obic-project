@@ -2,6 +2,8 @@
 
 namespace App\Repositories\Interfaces;
 
+use Illuminate\Database\Eloquent\Collection;
+
 interface CustomizationRepositoryInterface
 {
 
@@ -10,7 +12,7 @@ interface CustomizationRepositoryInterface
 
     public function getById(int $id);
 
-    public function search(string $keyword);
+    public function search(string $keyword): Collection;
 
     public function create(array $data);
 

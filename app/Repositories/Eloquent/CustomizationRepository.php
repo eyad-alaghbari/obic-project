@@ -3,8 +3,8 @@
 namespace App\Repositories\Eloquent;
 
 use App\Models\Customization;
-use Illuminate\Support\Collection;
 use App\Repositories\Interfaces\CustomizationRepositoryInterface;
+use Illuminate\Database\Eloquent\Collection;
 
 class CustomizationRepository implements CustomizationRepositoryInterface
 {
@@ -27,7 +27,7 @@ class CustomizationRepository implements CustomizationRepositoryInterface
      */
     public function getById(int $id): Customization
     {
-        return Customization::findOrFail($id);
+        return Customization::with('options')->findOrFail($id);
     }
 
 

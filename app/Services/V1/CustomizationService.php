@@ -52,6 +52,7 @@ class CustomizationService
      */
     public function searchCustomizations(string $keyword): Collection
     {
+        // dd($keyword);
         return $this->customizationRepository->search($keyword);
     }
 
