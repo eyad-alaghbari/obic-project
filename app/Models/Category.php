@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Category extends Model
 {
-    protected $fillable = ['name', 'parent_id', 'description'];
+    protected $fillable = ['name', 'parent_id', 'description','level','image'];
 
     public function parent()
     {
@@ -31,6 +31,27 @@ class Category extends Model
     public function customizations()
     {
         return $this->belongsToMany(Customization::class, 'category_customization', 'category_id', 'customization_id')->withTimestamps();
+    }
+
+    public function childrenRecursive()
+    {
+        return $this->hasMany(Category::class, 'parent_id')->with('childrenRecursive', 'products');
+    }
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($category) {
+
+            if (!is_null($category->parent_id)) {
+
+                $parent = self::find($category->parent_id);
+                if ($parent) {
+                    $category->level = $parent->level + 1;
+                }
+            }
+        });
     }
 
     // public function options()

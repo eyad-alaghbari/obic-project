@@ -17,9 +17,10 @@ Route::prefix('/admin')->group(function () {
 });
 
 
-Route::prefix('customer')->group(function () {
+Route::prefix('/customer')->group(function () {
     Route::post('register', [CustomerAuthController::class, 'register'])->middleware('guest');
-    Route::post('login', [CustomerAuthController::class, 'login']);
+    Route::post('login', [CustomerAuthController::class, 'log
+    in']);
     Route::post('logout', [CustomerAuthController::class, 'logout'])->middleware('auth:customer');
 });
 
@@ -134,6 +135,7 @@ Route::middleware(['auth:admin,customer'])->group(function () {
         // GET /api/products?search=example&vendor_id=1&category_id=2&custom_options[]=3&price_sort=asc&stock_sort=desc
 
         Route::get('/', [ProductController::class, 'index']);
+        Route::get('/getAllProductsByCategory/{categoryId}', [ProductController::class, 'getAllProductsByCategory']);
         Route::get('/{id}', [ProductController::class, 'show']);
     });
 });

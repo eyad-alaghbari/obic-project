@@ -2,14 +2,15 @@
 
 namespace App\Http\Controllers\Api\V1;
 
-use App\Http\Controllers\Controller;
-use App\Http\Requests\CategoryRequest;
-use App\Http\Requests\SyncCustomizationsRequest;
-use App\Http\Resources\CategoryResource;
-use App\Services\V1\CategoryService;
+use App\Models\Category;
+use Illuminate\Http\Request;
 use App\Trait\ApiResponseTrait;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use App\Services\V1\CategoryService;
+use App\Http\Requests\CategoryRequest;
+use App\Http\Resources\CategoryResource;
+use App\Http\Requests\SyncCustomizationsRequest;
 
 class CategoryController extends Controller
 {
@@ -216,6 +217,29 @@ class CategoryController extends Controller
     }
 
 
+    public function getAllProductsByCategory($categoryId)
+    {
+        $category = Category::with('products', 'childrenRecursive.products')
+        ->find($categoryId);
 
+        if (!$category) {
+            return response()->json(['error' => 'Category not found'], 404);
+        }
+
+        $allProducts = $this->collectAllProducts($category);
+
+        return response()->json($allProducts);
+    }
+
+    protected function collectAllProducts($category)
+    {
+        $products = $category->products;
+
+        foreach ($category->childrenRecursive as $childCategory) {
+            $products = $products->merge($this->collectAllProducts($childCategory));
+        }
+
+        return $products;
+    }
 
 }

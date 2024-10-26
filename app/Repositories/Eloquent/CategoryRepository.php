@@ -37,11 +37,12 @@ class CategoryRepository implements CategoryRepositoryInterface
 
     public function createCategory(array $data): Category
     {
+        // dd($data);
         try {
             return Category::create($data);
         } catch (\Exception $exception) {
             // TODO: Log the exception
-            throw new \RuntimeException('Something went wrong while creating a category.');
+            throw new \RuntimeException('Something went wrong while creating a category.'.$exception->getMessage());
         }
     }
 
