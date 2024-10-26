@@ -22,6 +22,18 @@ return [
                 'same' => 'The confirm password does not match.',
             ],
     ],
+    'params' => [
+        'search_string' => 'The search must be a string.',
+        'per_page_numeric' => 'The per page must be numeric.',
+        'per_page_min' => 'The per page must be at least :min.',
+        'per_page_max' => 'The per page must not exceed :max.',
+        'vendor_id_numeric' => 'The vendor id must be numeric.',
+        'category_id_numeric' => 'The category id must be numeric.',
+        'price_sort_in' => 'The price sort must be in asc or desc.',
+        'stock_sort_in' => 'The stock sort must be in asc or desc.',
+        'stock_numeric' => 'The stock must be numeric.',
+        'price_numeric' => 'The price must be numeric.',
+    ],
     'vendor' => [
         'name_required' => 'The name vendor is required',
         'email_required' => 'The email field is required.',
@@ -49,6 +61,12 @@ return [
         'name_required' => 'The customization name is required.',
         'name_max' => 'The customization name must not exceed :max characters.',
         'name_string' => 'The customization name must be a string.',
+        'description_string' => 'The description must be a string.',
+        'customizations_required' => 'The customizations is required.',
+        'customizations_array' => 'The customizations must be an array.',
+        'customizations_integer' => 'The customizations must be an integer.',
+        'id_exists' => 'The customizations id is not exist.',
+
     ],
     'customization_option' => [
         'value_required' => 'The customization option value is required.',

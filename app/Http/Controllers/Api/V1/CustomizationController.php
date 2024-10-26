@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\customizationRequest;
+use App\Http\Resources\CustomizationResource;
 use App\Services\V1\CustomizationService;
 use App\Trait\ApiResponseTrait;
 use Illuminate\Http\Request;
@@ -30,7 +31,7 @@ class CustomizationController extends Controller
     {
         $customizations = $this->customizationService->getAllCustomizations();
 
-        return $this->successResponse($customizations, 'Customizations retrieved successfully', 200);
+        return $this->successResponse(CustomizationResource::collection($customizations), 'Customizations retrieved successfully', 200);
     }
 
 
@@ -44,7 +45,7 @@ class CustomizationController extends Controller
     {
         $customization = $this->customizationService->getCustomizationById($id);
 
-        return $this->successResponse($customization, 'Customization retrieved successfully', 200);
+        return $this->successResponse(CustomizationResource::make($customization), 'Customization retrieved successfully', 200);
     }
 
 
@@ -58,7 +59,7 @@ class CustomizationController extends Controller
     {
         $customizations = $this->customizationService->searchCustomizations($request->input('keyword'));
 
-        return $this->successResponse($customizations, 'Customizations retrieved successfully', 200);
+        return $this->successResponse(CustomizationResource::collection($customizations), 'Customizations retrieved successfully', 200);
     }
 
 
@@ -72,7 +73,7 @@ class CustomizationController extends Controller
     {
         $customization = $this->customizationService->createCustomization($request->validated());
 
-        return $this->successResponse($customization, 'Customization created successfully', 200);
+        return $this->successResponse(CustomizationResource::make($customization), 'Customization created successfully', 200);
     }
 
 
@@ -87,7 +88,7 @@ class CustomizationController extends Controller
     {
         $customization = $this->customizationService->updateCustomization($id, $request->validated());
 
-        return $this->successResponse($customization, 'Customization updated successfully', 200);
+        return $this->successResponse(CustomizationResource::make($customization), 'Customization updated successfully', 200);
     }
 
 
@@ -103,5 +104,4 @@ class CustomizationController extends Controller
 
         return $this->successMessage('Customization deleted successfully', 200);
     }
-
 }

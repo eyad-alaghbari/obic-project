@@ -20,12 +20,11 @@ class ProductResource extends JsonResource
             'description' => $this->description,
             'price' => $this->price,
             'stock' => $this->stock,
+            'vendor' => VendorResource::make($this->whenLoaded('vendor')),
             'category' => CategoryResource::collection($this->whenLoaded('category')),
-            'vendor' => VendorResource::collection($this->whenLoaded('vendor')),
-            'reviews' => ReviewResource::collection($this->whenLoaded('reviews')),
-            'customizations' => CustomizationResource::collection($this->whenLoaded('customizations')),
-            'images' => ProductImageResource::collection($this->whenLoaded('images')),
             'customizationOptions' => CustomizationOptionResource::collection($this->whenLoaded('customizationOptions')),
+            'reviews' => ReviewResource::collection($this->whenLoaded('reviews')),
+            'images' => ProductImageResource::collection($this->whenLoaded('images')),
         ];
     }
 }

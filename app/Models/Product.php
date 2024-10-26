@@ -2,10 +2,12 @@
 
 namespace App\Models;
 
+use App\Trait\FilterableProductsTrait;
 use Illuminate\Database\Eloquent\Model;
 
 class Product extends Model
 {
+    use FilterableProductsTrait;
 
     protected $fillable = [
         'name',
@@ -23,7 +25,7 @@ class Product extends Model
 
     public function customizationOptions()
     {
-        return $this->belongsToMany(CustomizationOption::class);
+        return $this->belongsToMany(CustomizationOption::class, 'product_customization_option', 'product_id', 'customization_option_id');
     }
 
     public function vendor()
